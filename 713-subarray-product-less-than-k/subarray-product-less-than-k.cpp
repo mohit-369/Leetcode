@@ -5,14 +5,14 @@ public:
         int j=0;
         int ans=0;
 
-        if(k==0 or k==1) return 0;
+        if(k==0) return 0;
 
         int product=1;
 
         while(j<nums.size())
         {
             product*=nums[j];
-            while(product>=k)
+            while(product>=k && i<=j)
             {
                 product=product/nums[i];
                 i++;
