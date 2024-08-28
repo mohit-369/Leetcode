@@ -27,7 +27,11 @@ int solve(int index, vector<int> &prices, int buy, int fee,vector<vector<int>> &
 public:
     int maxProfit(vector<int>& prices, int fee) {
 
-        vector<vector<int>> dp(prices.size()+1,vector<int>(2,0));
+        // vector<vector<int>> dp(prices.size()+1,vector<int>(2,0));
+
+        vector<int> curr(2,0);
+
+        vector<int> next = curr;
 
         // return solve(0,prices,1,fee,dp);
 
@@ -38,27 +42,29 @@ public:
             {
                 if(buy)
                 {
-                    int buyKaro = -prices[index] + dp[index+1][0];
+                    int buyKaro = -prices[index] + next[0];
 
-                    int skipKaro = dp[index+1][buy];
+                    int skipKaro = next[1];
 
-                    dp[index][buy] = max(buyKaro,skipKaro);
+                    curr[buy] = max(buyKaro,skipKaro);
                 }
 
                 else
                 {
-                    int sellKaro = prices[index] + dp[index+1][1]-fee;
+                    int sellKaro = prices[index] + next[1]-fee;
 
-                    int skipKaro = dp[index+1][buy];
+                    int skipKaro = next[0];
 
-                    dp[index][buy] = max(sellKaro,skipKaro);
+                    curr[buy] = max(sellKaro,skipKaro);
                 }
             }
+
+            next = curr;
         }
 
 
 
-        return dp[0][1];
+        return curr[1];
 
 
         
