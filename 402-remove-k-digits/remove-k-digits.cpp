@@ -6,37 +6,46 @@ public:
 
         st.push(num[0]);
 
-        for (int i = 1; i < num.size(); i++) {
-
-            char ch = num[i];
-
-            while (st.size() && st.top() > ch && k) {
+        for(int i = 1; i < num.size(); i++)
+        {
+            while(k && st.empty()==false && st.top() > num[i])
+            {
                 st.pop();
 
                 k--;
             }
 
-            st.push(ch);
+            st.push(num[i]);
+        }
 
-            if (st.size() == 1 && ch == '0') {
-                st.pop();
-            }
+        while(k-- && !st.empty())
+        {
+            st.pop();
         }
 
         string ans;
 
-        while (k-- && st.size()) {
-            st.pop();
-        }
-
-        while (st.size()) {
+        while(st.empty()==false)
+        {
             ans.push_back(st.top());
-
             st.pop();
         }
 
-        reverse(ans.begin(), ans.end());
+        for(int i = ans.size()-1; i>=0; i--)
+        {
+            if(ans[i]!='0') break;
+            ans.pop_back();
+        }
 
-        return (ans.size()==0)?"0":ans;
+
+
+        reverse(ans.begin(),ans.end());
+
+        
+
+        return ans.size()==0?"0":ans;
+
+
+        
     }
 };
