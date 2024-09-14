@@ -33,11 +33,18 @@ int solve(int index,vector<int> &prices,int sell,vector<vector<int>> &dp)
 public:
     int maxProfit(vector<int>& prices) {
 
-        vector<vector<int>> dp(prices.size(),vector<int>(2,-1));
+        int mi = prices[0];
 
-        int ans = solve(prices.size()-1,prices,1,dp);
+        int res = 0;
 
-        return ans<0?0:ans;
+        for(int i = 1; i < prices.size(); i++)
+        {
+            res = max(res,prices[i] - mi);
+
+            mi = min(mi,prices[i]);
+        }
+
+        return res;
         
     }
 };
