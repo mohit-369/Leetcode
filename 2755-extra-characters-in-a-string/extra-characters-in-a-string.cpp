@@ -1,33 +1,44 @@
 class Solution {
-    int solve(const string &s, int index, const unordered_set<string> &st, unordered_map<int, int> &dp) {
-        if (index >= s.size()) return 0; // base case
+int solve(string s, int index,unordered_set<string> &st,unordered_map<int,int> &dp)
+{
+    if(index >= s.size()) return 0;
 
-        if (dp.find(index) != dp.end()) return dp[index]; // memoization check
+    if(dp.find(index) != dp.end()) return dp[index];
 
-        int ans = s.size() - index; // worst case: all remaining characters are extra
+    int ans = s.size() - index;
 
-        string temp = "";
-        for (int i = index; i < s.size(); i++) {
-            temp += s[i]; // build substring
+    string temp = "";
 
-            if (st.find(temp) != st.end()) {
-                // No extra characters for this substring, move to the next part
-                ans = min(ans, solve(s, i + 1, st, dp));
-            } else {
-                // Count current characters as extra
-                int extra = temp.size() + solve(s, i + 1, st, dp);
-                ans = min(ans, extra);
-            }
+    for(int i = index ; i < s.size(); i++)
+    {
+        temp+=s[i];
+
+        if(st.find(temp) != st.end())
+        {
+            ans = min(ans,solve(s,i+1,st,dp));
         }
+        else
+        {
+            int x = temp.size() + solve(s,i+1,st,dp);
 
-        return dp[index] = ans; // store the result
+            ans = min(ans,x);
+
+            
+        }
     }
 
+    // ans = min(ans, 1 + solve(s,index+1,st,dp));
+
+    return dp[index] = ans;
+}
 public:
     int minExtraChar(string s, vector<string>& dictionary) {
-        unordered_set<string> st(dictionary.begin(), dictionary.end()); // convert dictionary to set
-        unordered_map<int, int> dp; // memoization map
 
-        return solve(s, 0, st, dp); // start from index 0
+        unordered_map<int,int> dp;
+
+        unordered_set<string> st(dictionary.begin(),dictionary.end());
+
+        return solve(s,0,st,dp);
+        
     }
 };
