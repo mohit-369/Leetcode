@@ -5,7 +5,7 @@ int solve(string s, int index,unordered_set<string> &st,unordered_map<int,int> &
 
     if(dp.find(index) != dp.end()) return dp[index];
 
-    int ans = s.size() - index;
+    int ans = INT_MAX;
 
     string temp = "";
 
