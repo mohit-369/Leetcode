@@ -1,67 +1,92 @@
 class Solution {
+class TrieNode{
+    public:
+    char ch;
+    unordered_map<char,TrieNode*> childs;
+    int count;
+    TrieNode(char d)
+    {
+        ch = d;
+        count = 0;
+    }
+
+};
+class Trie{
+    TrieNode* root;
+    public:
+    Trie()
+    {
+        root = new TrieNode ('\0');
+    }
+
+    void insertWord(string word)
+    {
+        TrieNode* curr = root;
+        for(int i = 0; i < word.size(); i++)
+        {
+            char ch = word[i];
+
+            if(curr -> childs.find(ch) != curr->childs.end())
+            {
+                curr = curr -> childs[ch];
+
+                curr -> count++;
+
+
+            }
+
+            else
+            {
+                TrieNode* newNode = new TrieNode(ch);
+
+                curr -> childs[ch] = newNode;
+
+                curr = newNode;
+
+                curr -> count++;
+            }
+        }
+
+        return ;
+    }
+
+    int count(string word)
+    {
+        int temp = 0;
+
+        TrieNode* curr = root;
+
+        for(int i = 0; i < word.size(); i++)
+        {
+            temp += curr -> childs[word[i]] -> count;
+
+            curr = curr -> childs[word[i]];
+        }
+
+        return temp;
+    }
+
+
+};
 public:
     vector<int> sumPrefixScores(vector<string>& words) {
 
-        vector<int> ans;
-
-        unordered_map<long long,int> mpp;
-
-        long long mod = 1011001110001111;
-
-        long long bash = 31;
-
-
-
-
+        Trie* t = new Trie();
 
         for(auto &it:words)
         {
-            string temp = it;
-
-            long long hash = temp[0] - 'a' + 1;
-
-            mpp[hash]++;
-
-            long long pow = 31;
-
-            for(int index = 1; index < temp.size(); index++)
-            {
-                hash = (hash + pow*(temp[index] - 'a' + 1)) % mod;
-
-                mpp[hash]++;
-
-                pow = (pow*bash) % mod;
-
-               
-            }
-
-
+            t -> insertWord(it);
         }
 
-         for(auto &it:words)
+        
+
+        vector<int> ans;
+
+        for(auto &it:words)
         {
-            string temp = it;
+           int temp = t -> count(it);
 
-            long long hash = temp[0] - 'a' + 1;
-
-            int tans = mpp[hash];
-
-            long long pow = 31;
-
-            for(int index = 1; index < temp.size(); index++)
-            {
-                hash = (hash + pow*(temp[index] - 'a' + 1)) % mod;
-
-                tans = (tans + mpp[hash]) % mod;
-
-                pow = (pow*bash) % mod;
-
-                
-            }
-
-            ans.push_back(tans);
-
-
+           ans.push_back(temp);
         }
 
         return ans;
