@@ -1,48 +1,47 @@
 class Solution {
+void rev(string &s, int st, int ed)
+{
+    while(st < ed)
+    {
+        swap(s[st++],s[ed--]);
+    }
+
+    return ;
+}
 public:
     string reverseWords(string s) {
 
-        stack<string> st;
+        reverse(s.begin(),s.end());
 
-        string temp;
+        int i = 0;
 
-        for(int i =0;i<s.size();i++)
-        {
-            if(s[i]==' ')
-            {
-                if(temp.size())
-                {
-                    st.push(temp);
-                    temp="";
-                }
-            }
-
-            else
-            {
-                temp.push_back(s[i]);
-            }
-        }
+        int start = 0;
 
         string ans;
 
-        if(temp.size())
+        while(i < s.size())
         {
-            ans=temp;
-        }
 
-        while(!st.empty())
-        {
-            if(ans.size())
+            if(s[i] != ' ')
             {
-                ans=ans+" "+st.top();
+                start = i;
+
+                while( i < s.size() && s[i] != ' ')
+                {
+                    i++;
+                }
+
+                rev(s,start,i-1);
+
+                ans = ans + s.substr(start,i - start) + " ";
             }
             else
             {
-                ans=st.top();
+                i++;
             }
-
-            st.pop();
         }
+
+        ans.pop_back();
 
         return ans;
         
