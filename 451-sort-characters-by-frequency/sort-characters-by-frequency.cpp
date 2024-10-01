@@ -2,31 +2,25 @@ class Solution {
 public:
     string frequencySort(string s) {
 
-        priority_queue<pair<int,char>> pq;
-
         unordered_map<char,int> mpp;
 
-        for(int i = 0; i < s.size(); i++)
+        for(auto &ele:s)
         {
-            mpp[s[i]]++;
+            mpp[ele]++;
         }
 
-        for(auto it:mpp)
+        auto cmp = [&](char a,char b)
         {
-            pq.push({it.second,it.first});
-        }
+            if(mpp[a] == mpp[b])
+            {
+                return a < b;
+            }
+            return mpp[a] > mpp[b];
+        };
 
-        string ans;
+        sort(s.begin(),s.end(),cmp);
 
-        while(pq.empty()==false)
-        {
-            ans+=string(pq.top().first,pq.top().second);
-
-            pq.pop();
-        }
-
-        return ans;
-
+        return s;
         
     }
 };
