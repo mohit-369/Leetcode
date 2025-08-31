@@ -1,90 +1,76 @@
 class Solution {
-bool isValid(int row,int col,char ch,vector<vector<char>> &temp)
-{
-    for(int i = 0; i < 9; i++)
+public:
+    bool canPalace(int row, int col, int ele, vector<vector<char>>& board)
     {
-        if(temp[row][i]==ch) return 0;
+        char ch = ele + '0';
 
-        if(temp[i][col]==ch) return 0;
-    }
-
-    // checking in square;
-
-    int rowStart = (row/3)*3;
-
-    int colStart = (col/3)*3;
-
-    for(int row = 0; row < 3; row++)
-    {
-        for(int col = 0; col < 3; col++)
+        for(int i = 0; i < 9; i++)
         {
-            if(temp[rowStart+row][colStart+col]==ch) return 0;
+            if(board[row][i] == ch) return false;
         }
-    }
 
-    return 1;
-
-}
-void solve(int row, int col, vector<vector<char>> &board,vector<vector<char>> &temp)
-{
-    if(row == board.size())
-    {
-        board = temp;
-
-        return;
-    }
-
-    if(temp[row][col] == '.')
-    {
-        for(char ch = '1'; ch <= '9'; ch++)
+        for(int i = 0; i < 9; i++)
         {
-            if(isValid(row,col,ch,temp))
+            if(board[i][col] == ch) return false;
+        }
+
+        int startRow = row - row % 3;
+        int startCol = col - col % 3;
+
+        for(int i = 0; i < 3; i++)
+        {
+            for(int j = 0; j < 3; j++)
             {
-                temp[row][col]=ch;
-                
-                if(col==8)
-                {
-                    solve(row+1,0,board,temp);
-                }
-
-                else
-                {
-                    solve(row,col+1,board,temp);
-                }
-
-                temp[row][col]='.';
+                if(board[startRow + i][startCol + j] == ch) return false;
             }
         }
-    }
 
-    else
+        return true;
+    }
+    bool  solve(int row, int col, vector<vector<char>>& board)
     {
-        if(col==8)
+        if(col == 9)
         {
-        solve(row+1,0,board,temp);
+            col = 0;
+            row = row + 1;
         }
 
-        else
+        if(row == 9) return true;
+
+        if(board[row][col] != '.')
         {
-        solve(row,col+1,board,temp);
+            return solve(row,col+1,board);
         }
 
+        for(int i = 1; i <= 9; i++)
+        {
+            if(canPalace(row,col,i,board))
+            {
+                board[row][col] = '0' + i;
+                if(solve(row,col+1,board)) return true;
+                board[row][col] = '.';
+            }
+        }
+
+        return false;
+
+        
     }
-
-    return;
-}
-public:
     void solveSudoku(vector<vector<char>>& board) {
 
-        int row = 0;
+        for(int i = 0; i < 9; i++)
+        {
+            for(int j = 0; j < 9; j++)
+            {
+                if(board[i][j] == '.')
+                {
+                    solve(i,j,board);
+                    return;
+                }
+            }
+        }
 
-        int col = 0;
-
-        vector<vector<char>> temp = board;
-
-        solve(row, col, board,temp);
-
-        return;
+        return ;
         
     }
 };
