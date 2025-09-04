@@ -9,65 +9,35 @@
  * };
  */
 class Solution {
-int calLen(ListNode* head)
-{
-    int len = 0;
 
-    while(head)
-    {
-        head = head -> next;
-
-        len++;
-    }
-
-    return len;
-
-
-}
-ListNode* solve(ListNode* head,int k, int len)
-{
-    if(len < k) return head;
-
-    ListNode* pre = NULL;
-
-    ListNode* curr = head;
-
-    ListNode* next = curr -> next;
-
-    int count = k;
-
-    while(count--)
-    {
-        curr -> next = pre;
-
-        pre = curr;
-
-        curr = next;
-
-        if(next)
-        {
-            next = curr -> next;
-        }
-    }
-
-    head -> next = solve(curr,k,len - k);
-
-    return pre;
-
-}
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
-
-        int len = calLen(head);
-
-        if(len < k) return head;
-
-        return solve(head,k,len);
-
-
-
-
         
+        if (!head) return head;
+
+        // Step 1: Check if at least k nodes remain
+        ListNode* check = head;
+        for (int i = 0; i < k; i++) {
+            if (!check) return head;   // < k nodes left, return as is
+            check = check->next;
+        }
+
+        // Step 2: Reverse exactly k nodes
+        ListNode *prev = NULL, *curr = head, *next = NULL;
+        int count = 0;
+        while (count < k && curr) {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+            count++;
+        }
+
+        // Step 3: Recursively process remaining list
+        head->next = reverseKGroup(curr, k);
+
+        // 'prev' is new head of this block
+        return prev;
         
     }
 };
